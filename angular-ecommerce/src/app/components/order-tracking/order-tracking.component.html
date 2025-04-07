@@ -1,0 +1,185 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-2xl mx-auto">
+    <!-- Back Button -->
+    <div class="mb-6">
+      <button
+        (click)="goBack()"
+        class="flex items-center text-blue-600 hover:text-blue-800"
+      >
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Home
+      </button>
+    </div>
+
+    <h1 class="text-2xl font-bold mb-8">Track Your Order</h1>
+
+    <!-- Order ID Input -->
+    <div class="mb-8">
+      <div class="flex gap-4">
+        <input
+          type="text"
+          [(ngModel)]="orderId"
+          placeholder="Enter your order ID"
+          class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          (click)="trackOrder()"
+          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Track Order
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-8">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+      <p class="mt-4 text-gray-600">Loading order details...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-8">
+      {{ error }}
+    </div>
+
+    <!-- Order Details -->
+    <div *ngIf="order" class="bg-white rounded-lg shadow-md p-6">
+      <!-- Order Status -->
+      <div class="mb-6">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">{{ getStatusIcon(order.orderStatus) }}</span>
+          <span [class]="'px-3 py-1 rounded-full text-sm font-medium ' + getStatusClass(order.orderStatus)">
+            {{ order.orderStatus | titlecase }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Status Timeline -->
+      <div class="mb-6">
+        <h2 class="text-lg font-semibold mb-4">Order Status Timeline</h2>
+        <div class="space-y-4">
+          <!-- Order Placed -->
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white">
+              ✓
+            </div>
+            <div>
+              <p class="font-medium">Order Placed</p>
+              <p class="text-sm text-gray-600">{{ order.createdAt | date:'medium' }}</p>
+            </div>
+          </div>
+
+          <!-- Order Confirmed -->
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white">
+              ✓
+            </div>
+            <div>
+              <p class="font-medium">Order Confirmed</p>
+              <p class="text-sm text-gray-600">{{ order.updatedAt | date:'medium' }}</p>
+            </div>
+          </div>
+
+          <!-- Order Packed -->
+          <div class="flex items-start gap-4" *ngIf="order.packedAt">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white">
+              ✓
+            </div>
+            <div>
+              <p class="font-medium">Order Packed</p>
+              <p class="text-sm text-gray-600">{{ order.packedAt | date:'medium' }}</p>
+            </div>
+          </div>
+
+          <!-- Order Dispatched -->
+          <div class="flex items-start gap-4" *ngIf="order.dispatchedAt">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white">
+              ✓
+            </div>
+            <div>
+              <p class="font-medium">Order Dispatched</p>
+              <p class="text-sm text-gray-600">{{ order.dispatchedAt | date:'medium' }}</p>
+            </div>
+          </div>
+
+          <!-- Order Shipped -->
+          <div class="flex items-start gap-4" *ngIf="order.shippedAt">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white">
+              ✓
+            </div>
+            <div>
+              <p class="font-medium">Order Shipped</p>
+              <p class="text-sm text-gray-600">{{ order.shippedAt | date:'medium' }}</p>
+            </div>
+          </div>
+
+          <!-- Order Delivered -->
+          <div class="flex items-start gap-4" *ngIf="order.deliveredAt">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white">
+              ✓
+            </div>
+            <div>
+              <p class="font-medium">Order Delivered</p>
+              <p class="text-sm text-gray-600">{{ order.deliveredAt | date:'medium' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="mb-6">
+        <h2 class="text-lg font-semibold mb-4">Order Summary</h2>
+        <div class="space-y-2">
+          <p><span class="font-medium">Order ID:</span> {{ order.id }}</p>
+          <p><span class="font-medium">Order Date:</span> {{ order.createdAt | date:'medium' }}</p>
+          <p><span class="font-medium">Total Amount:</span> ${{ order.totalAmount | number:'1.2-2' }}</p>
+        </div>
+      </div>
+
+      <!-- Shipping Information -->
+      <div class="mb-6">
+        <h2 class="text-lg font-semibold mb-4">Shipping Information</h2>
+        <div class="space-y-2">
+          <p>{{ order.shippingAddress.fullName }}</p>
+          <p>{{ order.shippingAddress.addressLine1 }}</p>
+          <p *ngIf="order.shippingAddress.addressLine2">{{ order.shippingAddress.addressLine2 }}</p>
+          <p>
+            {{ order.shippingAddress.city }}, {{ order.shippingAddress.state }}
+            {{ order.shippingAddress.postalCode }}
+          </p>
+          <p>{{ order.shippingAddress.country }}</p>
+          <p>{{ order.shippingAddress.phone }}</p>
+        </div>
+      </div>
+
+      <!-- Tracking Information -->
+      <div *ngIf="order.trackingNumber" class="mb-6">
+        <h2 class="text-lg font-semibold mb-4">Tracking Information</h2>
+        <div class="space-y-2">
+          <p><span class="font-medium">Tracking Number:</span> {{ order.trackingNumber }}</p>
+          <p *ngIf="order.expectedDeliveryDate">
+            <span class="font-medium">Expected Delivery:</span>
+            {{ order.expectedDeliveryDate | date:'mediumDate' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Order Items -->
+      <div>
+        <h2 class="text-lg font-semibold mb-4">Order Items</h2>
+        <div class="space-y-4">
+          <div *ngFor="let item of order.items" class="flex items-center gap-4">
+            <img [src]="item.imageUrl" [alt]="item.name" class="w-16 h-16 object-cover rounded">
+            <div class="flex-1">
+              <p class="font-medium">{{ item.name }}</p>
+              <p class="text-gray-600">Quantity: {{ item.quantity }}</p>
+              <p class="text-gray-600">${{ item.price | number:'1.2-2' }} each</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

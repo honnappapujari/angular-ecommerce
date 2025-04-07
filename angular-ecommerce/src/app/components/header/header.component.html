@@ -1,0 +1,37 @@
+<header class="bg-white shadow-sm">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex justify-between items-center">
+      <a routerLink="/" class="text-2xl font-bold">E-Commerce</a>
+      
+      <ul class="flex space-x-6">
+        <li class="nav-item">
+          <a routerLink="/products" class="nav-link">Products</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/cart" class="nav-link">
+            Cart ({{ cartCount }})
+          </a>
+        </li>
+        <ng-container *ngIf="!isLoggedIn">
+          <li class="nav-item">
+            <a routerLink="/login" class="nav-link">Login</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/register" class="nav-link">Register</a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="isLoggedIn">
+          <li class="nav-item">
+            <a routerLink="/profile" class="nav-link">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/order-history" class="nav-link">Orders</a>
+          </li>
+          <li class="nav-item">
+            <button (click)="logout()" class="nav-link">Logout</button>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </nav>
+</header>

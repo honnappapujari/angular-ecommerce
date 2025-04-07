@@ -1,0 +1,49 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold mb-8">My Wishlist</h1>
+
+  <!-- Wishlist Items -->
+  <div *ngIf="wishlistItems.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div *ngFor="let product of wishlistItems" class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="relative">
+        <img [src]="product.imageUrl[0]" [alt]="product.name" class="w-full h-64 object-cover">
+        <button (click)="removeFromWishlist(product.id)" 
+                class="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-red-50 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-4">
+        <h3 class="font-semibold text-lg mb-1">{{product.name}}</h3>
+        <p class="text-gray-600 text-sm mb-2">{{product.brand}}</p>
+        
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-lg font-bold">₹{{product.price}}</span>
+          <span class="text-gray-500 line-through text-sm">₹{{product.mrp}}</span>
+          <span class="text-green-600 text-sm">{{product.discountPercentage}}% OFF</span>
+        </div>
+
+        <button (click)="addToCart(product)" 
+                class="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800 transition-colors">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="wishlistItems.length === 0" class="text-center py-16">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+    <h2 class="text-2xl font-semibold mb-2">Your Wishlist is Empty</h2>
+    <p class="text-gray-600 mb-6 max-w-md mx-auto">
+      Save items that you like in your wishlist. Review them anytime and easily move them to the cart.
+    </p>
+    <a routerLink="/products" 
+       class="inline-block bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800 transition-colors">
+      Continue Shopping
+    </a>
+  </div>
+</div> 

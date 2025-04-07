@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <h2>Order History</h2>
+
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{error}}
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <div *ngIf="orders.length === 0" class="text-center my-5">
+      <p>You haven't placed any orders yet.</p>
+      <button class="btn btn-primary" routerLink="/products">Start Shopping</button>
+    </div>
+
+    <div class="card mb-3" *ngFor="let order of orders">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <h6 class="text-muted">Order #{{order.id}}</h6>
+            <p class="mb-0">{{order.orderDate | date:'medium'}}</p>
+          </div>
+          <div class="col-md-3">
+            <h6 class="text-muted">Status</h6>
+            <span class="badge" [ngClass]="{
+              'bg-warning': order.status === 'pending',
+              'bg-info': order.status === 'processing',
+              'bg-primary': order.status === 'shipped',
+              'bg-success': order.status === 'delivered'
+            }">
+              {{order.status | titlecase}}
+            </span>
+          </div>
+          <div class="col-md-3">
+            <h6 class="text-muted">Total Amount</h6>
+            <p class="mb-0">${{order.totalAmount.toFixed(2)}}</p>
+          </div>
+          <div class="col-md-3 text-end">
+            <button class="btn btn-outline-primary" (click)="viewOrderDetails(order.id)">
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

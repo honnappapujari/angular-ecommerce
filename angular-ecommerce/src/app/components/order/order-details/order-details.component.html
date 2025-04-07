@@ -1,0 +1,104 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Order Details</h2>
+    <button class="btn btn-outline-primary" routerLink="/orders">Back to Orders</button>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{error}}
+  </div>
+
+  <div class="row" *ngIf="order && !loading">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Order #{{order.id}}</h5>
+            <span class="badge" [ngClass]="{
+              'bg-warning': order.status === 'pending',
+              'bg-info': order.status === 'processing',
+              'bg-primary': order.status === 'shipped',
+              'bg-success': order.status === 'delivered'
+            }">
+              {{order.status | titlecase}}
+            </span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong>Order Date:</strong> {{order.orderDate | date:'medium'}}</p>
+          <p class="mb-1"><strong>Total Amount:</strong> ${{order.totalAmount.toFixed(2)}}</p>
+          <hr>
+          <h6>Items</h6>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th class="text-end">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of order.items">
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <img [src]="item.product.imageUrl" [alt]="item.product.name" class="me-2" style="width: 50px; height: 50px; object-fit: cover;">
+                      <div>
+                        <h6 class="mb-0">{{item.product.name}}</h6>
+                        <small class="text-muted">{{item.product.description | slice:0:50}}...</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>${{item.product.price.toFixed(2)}}</td>
+                  <td>{{item.quantity}}</td>
+                  <td class="text-end">${{(item.product.price * item.quantity).toFixed(2)}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Shipping Information</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-1">{{order.shippingAddress.street}}</p>
+          <p class="mb-1">{{order.shippingAddress.city}}, {{order.shippingAddress.state}} {{order.shippingAddress.zipCode}}</p>
+          <p class="mb-0">{{order.shippingAddress.country}}</p>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5 class="mb-0">Order Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal:</span>
+            <span>${{order.totalAmount.toFixed(2)}}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Shipping:</span>
+            <span>Free</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between">
+            <span class="h6 mb-0">Total:</span>
+            <span class="h6 mb-0">${{order.totalAmount.toFixed(2)}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

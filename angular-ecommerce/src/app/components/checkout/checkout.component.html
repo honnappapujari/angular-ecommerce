@@ -1,0 +1,181 @@
+<div class="min-h-screen bg-dark-800 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+      <!-- Order summary -->
+      <div class="lg:col-span-1">
+        <div class="bg-dark-700 rounded-lg shadow-lg p-6 mb-6">
+          <h2 class="text-xl font-bold text-gray-100 mb-4">Order Summary</h2>
+          <div class="flow-root">
+            <ul class="-my-6 divide-y divide-dark-600">
+              <li *ngFor="let item of cartItems" class="py-6 flex">
+                <div class="flex-shrink-0 w-24 h-24 rounded-md overflow-hidden">
+                  <img [src]="item.product.imageUrl" [alt]="item.product.name" 
+                       class="w-full h-full object-cover">
+                </div>
+                <div class="ml-4 flex-1 flex flex-col">
+                  <div>
+                    <div class="flex justify-between text-base font-medium text-gray-100">
+                      <h3>{{ item.product.name }}</h3>
+                      <p class="ml-4">${{ item.product.price }}</p>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-400">
+                      Size: {{ item.size }} | Quantity: {{ item.quantity }}
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="border-t border-dark-600 mt-6 pt-6">
+            <div class="flex justify-between text-base font-medium text-gray-100">
+              <p>Subtotal</p>
+              <p>${{ getSubtotal() }}</p>
+            </div>
+            <div class="flex justify-between text-base font-medium text-gray-100 mt-2">
+              <p>Shipping</p>
+              <p>$5.00</p>
+            </div>
+            <div class="flex justify-between text-base font-medium text-gray-100 mt-2">
+              <p>Tax</p>
+              <p>${{ getTax() }}</p>
+            </div>
+            <div class="flex justify-between text-lg font-bold text-gray-100 mt-4">
+              <p>Total</p>
+              <p>${{ getTotal() }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout form -->
+      <div class="lg:col-span-1">
+        <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <div class="bg-dark-700 rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-100 mb-4">Shipping Information</h2>
+            
+            <div class="grid grid-cols-6 gap-6">
+              <div class="col-span-6 sm:col-span-3">
+                <label for="firstName" class="block text-sm font-medium text-gray-300">
+                  First name
+                </label>
+                <input type="text" 
+                       id="firstName" 
+                       formControlName="firstName"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              </div>
+
+              <div class="col-span-6 sm:col-span-3">
+                <label for="lastName" class="block text-sm font-medium text-gray-300">
+                  Last name
+                </label>
+                <input type="text" 
+                       id="lastName" 
+                       formControlName="lastName"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              </div>
+
+              <div class="col-span-6">
+                <label for="email" class="block text-sm font-medium text-gray-300">
+                  Email address
+                </label>
+                <input type="email" 
+                       id="email" 
+                       formControlName="email"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              </div>
+
+              <div class="col-span-6">
+                <label for="address" class="block text-sm font-medium text-gray-300">
+                  Street address
+                </label>
+                <input type="text" 
+                       id="address" 
+                       formControlName="address"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              </div>
+
+              <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                <label for="city" class="block text-sm font-medium text-gray-300">
+                  City
+                </label>
+                <input type="text" 
+                       id="city" 
+                       formControlName="city"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              </div>
+
+              <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                <label for="state" class="block text-sm font-medium text-gray-300">
+                  State
+                </label>
+                <input type="text" 
+                       id="state" 
+                       formControlName="state"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              </div>
+
+              <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                <label for="zip" class="block text-sm font-medium text-gray-300">
+                  ZIP / Postal code
+                </label>
+                <input type="text" 
+                       id="zip" 
+                       formControlName="zip"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-dark-700 rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold text-gray-100 mb-4">Payment Information</h2>
+            
+            <div class="space-y-4">
+              <div>
+                <label for="cardNumber" class="block text-sm font-medium text-gray-300">
+                  Card number
+                </label>
+                <input type="text" 
+                       id="cardNumber" 
+                       formControlName="cardNumber"
+                       class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                       placeholder="0000 0000 0000 0000">
+              </div>
+
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-3">
+                  <label for="expDate" class="block text-sm font-medium text-gray-300">
+                    Expiration date
+                  </label>
+                  <input type="text" 
+                         id="expDate" 
+                         formControlName="expDate"
+                         class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                         placeholder="MM/YY">
+                </div>
+
+                <div class="col-span-3">
+                  <label for="cvv" class="block text-sm font-medium text-gray-300">
+                    CVV
+                  </label>
+                  <input type="text" 
+                         id="cvv" 
+                         formControlName="cvv"
+                         class="mt-1 block w-full border-dark-600 rounded-md shadow-sm py-2 px-3 bg-dark-800 text-gray-100 focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                         placeholder="000">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button type="submit"
+                    [disabled]="checkoutForm.invalid"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed">
+              Place Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
